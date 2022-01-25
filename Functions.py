@@ -71,7 +71,7 @@ def optmize_booster(X_train, X_test, y_train, y_test, average, param_grid = {'et
 
 def randomly_selected(data, class_names, number_of_points):
     
-    if number_of_points > len(data.shape[0]):
+    if number_of_points > data.shape[0]:
       number_of_points = data.shape[0]
       print(f'Number of points to training was limited to the maximum size of dataframe: {number_of_points}')
     X = data.drop('y', axis = 1).to_numpy()
@@ -87,7 +87,7 @@ def randomly_selected(data, class_names, number_of_points):
 
 def tree_query(data, class_names, number_of_points, metrics):
     
-    if number_of_points > len(data.shape[0]):
+    if number_of_points > data.shape[0]:
       number_of_points = data.shape[0]
       print(f'Number of points to training was limited to the maximum size of dataframe: {number_of_points}')
 
@@ -120,7 +120,6 @@ def outliers(data, class_names, cont):
         temp_list.append(df_temp)
     df_ready = pd.concat(temp_list)
     df_ready = df_ready.set_index('y')
-    print(df_ready)
     return df_ready
 
 
@@ -211,7 +210,7 @@ def df2hmr(data, filename, df_columns_names, confidence='product', numfeats = 2)
 
 def anchor_exp(data, 
               average = 'weighted', 
-              test_size = 0.2, 
+              test_size = 0.3, 
               cont = 0.1, 
               number_of_points = 10, 
               description_method = 'tree_query', 
@@ -229,7 +228,7 @@ def anchor_exp(data,
     model, score, recall, precision, accuracy, best_params = optmize_booster(X_train.values, X_test.values, y_train, y_test, average)
     predict_fn = lambda x: model.predict_proba(x)
     explainer = AnchorTabular(predict_fn, df_features)
-    explainer.fit(X_train, disc_perc=[25, 50, 75])
+    explainer.fit(X_train.values, disc_perc=[25, 50, 75])
 
     list_of_rules = []
     if description_method == 'tree_query':
@@ -245,7 +244,6 @@ def anchor_exp(data,
     df_input = func(*additional_input)
     
     rules = []
-    #class_names = np.unique(df_input.index)
     rules_out = pd.DataFrame()
     for cluster in class_names:
         anchors = []
