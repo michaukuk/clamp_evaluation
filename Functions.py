@@ -301,12 +301,11 @@ def convert_rules (rules, org, mod):
 
 
 def load_data_to_explain(name, plot = True):
-    with open('datasets/'+name, 'rb') as f:
-        df = pickle.load(f)
-        
-        if plot:
-            i = Image(filename='pix/'+name.split('.')[0]+'.png')
-            display(i)
+    df = pd.read_csv('datasets/'+name)
+    
+    if plot:
+        i = Image(filename='pix/'+name.split('.')[0]+'.png')
+        display(i)
     return df
 
 def available_data():
