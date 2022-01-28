@@ -30,6 +30,8 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.model_selection import RandomizedSearchCV
+import os
+from IPython.display import Image, display
 
 
 def prepare_df(data, test_size):
@@ -298,4 +300,15 @@ def convert_rules (rules, org, mod):
     return rules
 
 
+def load_data_to_explain(name, plot = True):
+    with open('datasets/'+name, 'rb') as f:
+        df = pickle.load(f)
+        
+        if plot:
+            i = Image(filename='pix/'+name.split('.')[0]+'.png')
+            display(i)
+    return df
+
+def available_data():
+    return os.listdir('datasets')
 
