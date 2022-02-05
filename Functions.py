@@ -53,7 +53,7 @@ def optmize_booster(X_train, X_test, y_train, y_test, average, param_grid = {'et
         compute = compute*len(x)
     print('Total iterations: ', compute)
           
-    clf = RandomizedSearchCV(xgboost.XGBClassifier(), param_grid, n_iter = compute, n_jobs = -1)
+    clf = RandomizedSearchCV(xgboost.XGBClassifier(), param_grid, n_iter = compute)
     model = clf.fit(X_train, y_train)
     y_pred = model.predict(X_test)
 
