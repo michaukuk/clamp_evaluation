@@ -32,6 +32,7 @@ from sklearn.metrics import precision_score
 from sklearn.model_selection import RandomizedSearchCV
 import os
 from IPython.display import Image, display
+from sklearn_extra.cluster import KMedoids
 
 
 def prepare_df(data, test_size):
@@ -242,6 +243,9 @@ def anchor_exp(data,
     elif description_method == 'random':
         func = randomly_selected
         additional_input = [data, class_names, number_of_points]
+    elif description_method == 'centroids':
+        func = kmedoids_des
+        additional_input = [data]
         
     df_input = func(*additional_input)
     
