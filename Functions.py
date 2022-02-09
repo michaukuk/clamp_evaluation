@@ -125,7 +125,13 @@ def outliers(data, class_names, cont):
     df_ready = df_ready.set_index('y')
     return df_ready
 
-
+def kmedoids_des(df, class_names):
+    X = df.drop('y', axis = 1).to_numpy()
+    kmedoids = KMedoids(n_clusters=len(df['y'].unique()), random_state=0).fit(X)
+    df_ready = pd.DataFrame(data = kmedoids.cluster_centers_, columns = df.drop('y', axis = 1).columns)
+    df_ready['y'] = df['y'].unique()
+    df_ready = df_ready.set_index('y')
+    return df_ready
 
 def inparse(condition):
     fs = re.sub(r'([-+]?[0-9]+\.[0-9]+)(<=|>=|<|>|)(f[0-9]+)(<=|>=|<|>)([-+]?[0-9]+\.[0-9]+)',r'\2',condition)
@@ -245,7 +251,7 @@ def anchor_exp(data,
         additional_input = [data, class_names, number_of_points]
     elif description_method == 'centroids':
         func = kmedoids_des
-        additional_input = [data]
+        additional_input = [data, class_names]
         
     df_input = func(*additional_input)
     
@@ -314,12 +320,3 @@ def load_data_to_explain(name, plot = True):
 
 def available_data():
     return os.listdir('datasets')
-
-
-def kmedoids_des (df):
-    X = df.drop('y', axis = 1).to_numpy()
-    kmedoids = KMedoids(n_clusters=len(df['y'].unique()), random_state=0).fit(X)
-    df_ready = pd.DataFrame(data = kmedoids.cluster_centers_, columns = df.drop('y', axis = 1).columns)
-    df_ready['y'] = df['y'].unique()
-    df_ready = df_ready.set_index('y')
-    return df_ready
