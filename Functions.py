@@ -312,3 +312,10 @@ def available_data():
     return os.listdir('datasets')
 
 
+def kmedoids_des (df):
+    X = df.drop('y', axis = 1).to_numpy()
+    kmedoids = KMedoids(n_clusters=len(df['y'].unique()), random_state=0).fit(X)
+    df_ready = pd.DataFrame(data = kmedoids.cluster_centers_, columns = df.drop('y', axis = 1).columns)
+    df_ready['y'] = df['y'].unique()
+    df_ready = df_ready.set_index('y')
+    return df_ready
