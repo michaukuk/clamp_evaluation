@@ -217,7 +217,7 @@ def df2hmr(data, filename, df_columns_names, confidence='product', numfeats = 2)
  
             f.write('xrule anchor/'+str(i)+': '+r['hmr_cond']+ ' ==>  [cluster set '+str(r['Cluster'])+']. #'+str(r['confidence'])+'\n')
 
-def anchor_exp(data, 
+def anchor_exp(data_c, 
               average = 'weighted', 
               test_size = 0.3, 
               cont = 0.1, 
@@ -225,7 +225,10 @@ def anchor_exp(data,
               description_method = 'tree_query', 
               threshold = 0.85, 
               metrics = 'minkowski'):
-  
+    
+    
+    data = data_c.copy(deep = True)
+    
     X_train, X_test, y_train, y_test, class_names, num_of_df_features, df_features = prepare_df(data, test_size)
 
     orignal_features = list(data.columns[:-1])
